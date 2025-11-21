@@ -22,11 +22,10 @@ It functions as the client-side interface for the [Python Finance Server](https:
 
 ## Tech Stack
 
-* **Framework:** React Native (Expo SDK)
-* **Routing:** Expo Router (File-based routing)
-* **State Management:** Zustand (with Persist middleware)
-* **Charts:** Victory Native
-* **Backend:** Python Finance Server (External API)
+* **Framework:** React Native ([Expo SDK](https://github.com/expo/expo/tree/main/templates/expo-template-tabs))
+* **State Management:** [Zustand (with Persist middleware)](https://zustand.docs.pmnd.rs/integrations/persisting-store-data)
+* **Charts:** [Victory Native XL](https://nearform.com/open-source/victory-native/docs/)
+* **Backend:** [Python Finance Server](https://github.com/supershaneski/python-finance-server) (External API)
 
 ## API Integration
 
@@ -68,7 +67,7 @@ npx expo start --clear
 ```
 
 > [!Note]
-> Ensure the backend server is running locally or accessible remotely before starting the app.
+> Ensure the [backend server](https://github.com/supershaneski/python-finance-server#setup) is running locally or accessible remotely before starting the app.
 
 
 ## Future Roadmap
