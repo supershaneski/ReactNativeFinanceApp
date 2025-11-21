@@ -1,213 +1,81 @@
-```js
-app/
-└── (tabs)/
-    ├── notification/
-    └── home/
-        ├── index.tsx
-        └── ticker.tsx
+# React Native Finance Tracker
+
+A sample finance application built with **Expo** and **React Native**. This app allows users to track stock tickers and view historical performance graphs.
+
+It functions as the client-side interface for the [Python Finance Server](https://github.com/supershaneski/python-finance-server).
+
+![Expo](https://img.shields.io/badge/expo-1C1E21?style=for-the-badge&logo=expo&logoColor=white)
+![React Native](https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![Zustand](https://img.shields.io/badge/zustand-%2320232a.svg?style=for-the-badge&logo=react&logoColor=white)
+
+## Screenshots
+
+| Watchlist | Stock Detail & History |
+|:---:|:---:|
+| ![Watchlist](./docs/screen1.webp) | ![Stock Detail](./docs/screen2.webp) |
+
+## Key Features
+
+* **Ticker Tracking:** Monitor stock symbols and current prices.
+* **Interactive Graph:** Visualize historical stock data using **Victory Native**.
+* **Simple Caching:** Implements client-side caching via **Zustand Persist** to minimize network requests and ensure offline availability.
+
+## Tech Stack
+
+* **Framework:** React Native (Expo SDK)
+* **Routing:** Expo Router (File-based routing)
+* **State Management:** Zustand (with Persist middleware)
+* **Charts:** Victory Native
+* **Backend:** Python Finance Server (External API)
+
+## API Integration
+
+This application consumes data from our [custom Python backend](https://github.com/supershaneski/python-finance-server).
+
+### Endpoints Used
+
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `GET` | `/api/ticker?id=<symbol>` | Retrieves current data for a specific stock. |
+| `GET` | `/api/tickers?symbols=<symbol1,symbol2,...>` | Refreshes data for multiple tickers (watchlist). |
+| `GET` | `/add/history?id=<symbol>` | Fetches historical data points for the graph. |
+
+
+
+## Installation
+
+Clone the repository and install the dependencies:
+```sh
+git clone https://github.com/supershaneski/reactnativefinanceapp.git
+cd reactnativefinanceapp
+npm install
 ```
 
-```js
-<View style={styles.statusRow}>
-    <View style={[styles.badge, { backgroundColor: '#f66' }]}>
-        <Text style={styles.badgeText}>CLOSED</Text>
-    </View>
-    <Text style={styles.panel}>
-        {tradeAgeSeconds !== null ? `${formatAge(tradeAgeSeconds)} ago` : '—'}
-    </Text>
-    <Text style={styles.panel}>
-        {ageSeconds !== null ? `${formatAge(ageSeconds)} ago` : '—'}
-    </Text>
-</View>
+Copy the example file `.env.example` to `.env` in the project root:
+```sh
+cp .env.example .env  # Linux/macOS
+copy .env.example .env  # Windows
 ```
 
-```css
-statusRow: { flexDirection: 'row', alignItems: 'center', marginTop: 12, gap: 8 },
-badge: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: 12 },
-badgeText: { color: '#fff', fontSize: 10, fontWeight: '600', letterSpacing: 0.5 },
-panel: { fontSize: 13, color: '#007AFF', fontWeight: '500' },
-sourceText: { fontSize: 11, color: '#999' },
+Set the server IP address and port:
+```env
+EXPO_PUBLIC_BASEURL=http://your_server_ipaddress:8000
 ```
 
-```js
-import * as React from 'react'
-import { useWindowDimensions, View } from 'react-native'
-import { CartesianChart, Bar } from 'victory-native'
-import { LinearGradient, vec } from '@shopify/react-native-skia'
-import FontContext from '../store/fontstore'
-
-const getMonthLabel = (date) => {
-
-    if(!date) {
-        return ''
-    }
-
-    if(typeof date !== 'string') {
-        return ''
-    }
-
-    const tokens = date.split('-')
-
-    if(tokens.length === 0) {
-        return ''
-    }
-    
-    return `${parseInt(tokens[1])}月`
-
-}
-
-export default  function GraphOccupancyRate({
-    data = [],
-    max = 10,
-    height = 250
-}) {
-    
-    const { font } = React.useContext(FontContext)
-
-    const { width: windowWidth } = useWindowDimensions()
-
-    return (
-        <View style={{
-            height: height,
-        }}>
-            <CartesianChart 
-            data={data} 
-            xKey='x'
-            yKeys={['y']}
-            axisOptions={{ 
-                font,
-                labelColor: '#a2a2a2',
-                lineColor: '#b8b8b8',
-                tickCount: {
-                    y: 5,
-                    x: 12
-                },
-                formatXLabel: (a) => getMonthLabel(a),
-                formatYLabel: (a) => String(a),
-            }}
-            domain={{y: [0, max]}}
-            padding={{
-                left: 8,
-                right: 8,
-            }}
-            domainPadding={{ 
-                left: windowWidth > 414 ? 48 : 24,
-                right: windowWidth > 414 ? 48 : 24
-            }}
-            >
-                {({ points, chartBounds }) => {
-                    return (
-                        <Bar
-                        points={points.y}
-                        chartBounds={chartBounds}
-                        animate={{ type: 'spring' }}
-                        //color='#60C0E0'
-                        >
-                            <LinearGradient
-                            start={vec(0, 0)}
-                            end={vec(0, height)}
-                            //colors={["#28a7da", "#60e0c0", "#ff409f"]}
-                            colors={[ '#2AAAD5', '#BFE6F2' ]}
-                            />
-                        </Bar>
-                    )
-                }
-                }
-            </CartesianChart>
-        </View>
-    )
-}
+Run the app:
+```sh
+npx expo start --clear
 ```
 
-```js
-import * as React from 'react'
-import { View, StyleSheet, useWindowDimensions } from 'react-native'
-import { CartesianChart, Bar } from 'victory-native'
-import { LinearGradient, vec } from '@shopify/react-native-skia'
-import FontContext from '../store/fontstore'
+> [!Note]
+> Ensure the backend server is running locally or accessible remotely before starting the app.
 
-const getMonthLabel = (date) => {
-    if (!date || typeof date !== 'string') return ''
-    
-    const tokens = date.split('-')
-    
-    return tokens.length ? `${parseInt(tokens[1], 10)}月` : ''
-}
 
-export default function GraphIncomeExpenses({
-    data = [],
-    max = 20,
-    height = 240
-}) {
+## Future Roadmap
 
-    const { font } = React.useContext(FontContext)
+* [ ] **AI Integration:** Implement stock analysis and insights powered by **Gemini AI**.
+* [ ] **Push Notifications:** Add push notifications handler.
 
-    const { width: windowWidth } = useWindowDimensions()
+## License
 
-    return (
-        <View style={[styles.container, {
-            height: height,
-        }]}>
-            <CartesianChart 
-            data={data} 
-            xKey='x'
-            yKeys={['y']}
-            axisOptions={{ 
-                font,
-                labelColor: '#a2a2a2',
-                lineColor: '#b8b8b8',
-                tickCount: {
-                    y: 5,
-                    x: 12
-                },
-                formatXLabel: (a) => getMonthLabel(a),
-                formatYLabel: (a) => {
-                    const b = parseInt(a)
-                    if(Math.abs(b) >= 10000) {
-                        let c = b / 10000
-                        return c % 1 === 0 ? `${c.toFixed(0)}万` : `${c.toFixed(1)}万`
-                    } else if(Math.abs(b) >= 1000) {
-                        let c = b / 1000
-                        return c % 1 === 0 ? `${c.toFixed(0)}千` : `${c.toFixed(1)}千`
-                    } else {
-                        return String(b)
-                    }
-                }
-            }}
-            domain={{y: [-max, max]}}
-            padding={{
-                left: 8,
-                right: 8,
-            }}
-            domainPadding={{ 
-                left: windowWidth > 414 ? 48 : 24,
-                right: windowWidth > 414 ? 48 : 24
-            }}>
-                {({ points, chartBounds }) => {
-                    return (
-                        <Bar
-                        points={points.y}
-                        chartBounds={chartBounds}
-                        //color='#60C0E0'
-                        animate={{ type: 'spring' }}
-                        >
-                            <LinearGradient
-                            start={vec(0, 0)}
-                            end={vec(0, height)}
-                            //colors={["#28a7da", "#60e0c0", "#ff409f"]}
-                            colors={[ '#2AAAD5', '#BFE6F2', '#2AAAD5' ]}
-                            />
-                        </Bar>
-                    )
-                }}
-            </CartesianChart>
-        </View>
-    )
-}
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    }
-})
-```
+This project is licensed under the MIT License.
