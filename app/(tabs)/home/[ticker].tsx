@@ -31,6 +31,7 @@ export default function TickerScreen() {
   const getTicker = useFinanceStore((state) => state.getTicker)
   const removeTicker = useFinanceStore((state) => state.removeTicker)
   const getHistory = useFinanceStore((state) => state.getHistory)
+  const removeHistory = useFinanceStore((state) => state.removeHistory)
 
   React.useEffect(() => {
     getHistory(symbol, range)
@@ -39,6 +40,7 @@ export default function TickerScreen() {
   const handleRemove = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
     removeTicker(symbol)
+    removeHistory(symbol)
     router.back()
   }
 
@@ -115,12 +117,15 @@ export default function TickerScreen() {
           percent={percent}
           metadata={metadata}
         />
-        {
+        {/*
           history &&
           <View style={styles.section}>
             <DisplayGraph history={history} range={range} onRangeSelect={(a) => setRange(a)} />
           </View>
-        }
+        */}
+        <View style={styles.section}>
+          <DisplayGraph history={history} range={range} onRangeSelect={(a) => setRange(a)} />
+        </View>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Market Stats</Text>
           <View style={styles.grid}>

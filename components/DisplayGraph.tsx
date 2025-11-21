@@ -12,16 +12,51 @@ interface DisplayGraphProps {
     onRangeSelect: (a: string) => void
 }
 
+interface Datum {
+  x: string
+  y: { close: number }
+}
+
 export default function DisplayGraph({ history, range = '1D', onRangeSelect }: DisplayGraphProps) {
     const { height } = useWindowDimensions()
     const { font } = React.useContext(FontContext)
 
-    const raw = history?.data ?? []
+    const rawData = history?.data
+    const hasData = rawData && Array.isArray(rawData) && rawData.length > 0
 
-    const data = raw.map((a) => ({
-        timestamp: formatTimestamp(a.timestamp, range),
-        close: a.close,
-    }))
+    const data = hasData 
+        ? rawData.map((a) => ({
+              timestamp: formatTimestamp(a.timestamp, range),
+              close: a.close,
+          }))
+        : []
+
+    if (!history || !hasData) {
+        return (
+            <View>
+                <View style={styles.buttonGroups}>
+                    {['1D','1W','1M','3M','1Y','5Y'].map((a) => (
+                        <TouchableOpacity 
+                            key={a} 
+                            //onPress={() => onRangeSelect(a)} 
+                            style={[styles.button, { backgroundColor: a === range ? '#3399ff' : '#fff' }]}
+                        >
+                            <Text style={[styles.text, { color: a === range ? '#fff' : '#111' }]}>
+                                {a}
+                            </Text>
+                        </TouchableOpacity>
+                    ))}
+                </View>
+                <View style={{ height: height * 0.25, justifyContent: 'center', alignItems: 'center' }}>
+                    <Text style={{ color: '#888', fontSize: 14 }}>
+                        {history === undefined || history === null 
+                            ? 'Loading price data...' 
+                            : 'No price data available for this range'}
+                    </Text>
+                </View>
+            </View>
+        )
+    }
 
     return (
         <View>
