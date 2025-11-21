@@ -1,17 +1,17 @@
 {
   "expo": {
-    "name": "ReactVictoryNative",
-    "slug": "ReactVictoryNative",
+    "name": "ReactNativeFinanceApp",
+    "slug": "ReactNativeFinanceApp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "reactvictorynative",
+    "scheme": "rnfinance",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/images/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#8a2be2"
     },
     "ios": {
       "supportsTablet": true
@@ -30,7 +30,23 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "ios": {
+            "backgroundColor": "#7fffd4",
+            "image": "./assets/images/splash-icon.png",
+            "resizeMode": "cover"
+          },
+          "android": {
+            "backgroundColor": "#a52a2a",
+            "image": "./assets/images/splash-icon.png",
+            "imageWidth": 220
+          }
+        }
+      ],
+      "expo-localization"
     ],
     "experiments": {
       "typedRoutes": true

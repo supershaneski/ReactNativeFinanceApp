@@ -39,3 +39,12 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# my ignore list
+_bin/
+.env
+*.bu.json
+*.bu.js
+*.bu.ts
+*.bu.tsx
+*.bu.md

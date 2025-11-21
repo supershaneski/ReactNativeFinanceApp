@@ -1,32 +1,57 @@
-import React from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable } from 'react-native';
+import { useNotificationStore } from '@/stores/notificationstore'
+import Ionicons from '@expo/vector-icons/Ionicons'
+import { Tabs } from 'expo-router'
+import React from 'react'
 
-import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/components/useColorScheme';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
+import { useClientOnlyValue } from '@/components/useClientOnlyValue'
 
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
+  name: React.ComponentProps<typeof Ionicons>['name']
   color: string;
 }) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
+  return <Ionicons size={28} style={{ marginBottom: -3 }} {...props} />
+}
+
+export const unstable_settings = {
+  initialRouteName: '/(tabs)/home',
 }
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+  const unreadCount = useNotificationStore((state) => state.notifications.filter((a) => !a.read).length)
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
+        tabBarHideOnKeyboard: true,
+        tabBarActiveTintColor: '#3B82F6',
+        tabBarBadgeStyle: {
+          backgroundColor: '#EF4444',
+          color: '#FFFFFF',
+        },
         headerShown: useClientOnlyValue(false, true),
       }}>
       <Tabs.Screen
+        name='home'
+        options={{
+          headerShown: false,
+          title: 'Following',
+          tabBarIcon: ({ color }) => <TabBarIcon name='trending-up-outline' color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name='notification'
+        options={{
+          headerShown: false,
+          title: 'Notifications',
+          tabBarBadge: unreadCount > 0 ? unreadCount : undefined,
+          tabBarIcon: ({ color }) => <TabBarIcon name='notifications-outline' color={color} />,
+        }}
+      />
+    </Tabs>
+  )
+}
+
+/*
+<Tabs.Screen
         name="index"
         options={{
           title: 'Tab One',
@@ -46,14 +71,4 @@ export default function TabLayout() {
             </Link>
           ),
         }}
-      />
-      <Tabs.Screen
-        name="two"
-        options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      />
-    </Tabs>
-  );
-}
+      />*/
