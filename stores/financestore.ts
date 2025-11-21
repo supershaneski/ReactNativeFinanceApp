@@ -49,7 +49,7 @@ export const useFinanceStore = create<FinanceStore>()(
                     const isExpired = now - cachedAt > CACHE_TTL_MS
 
                     if (!isExpired) {
-                        console.log(`Cache hit (fresh): ${symbol}`)
+                        console.log(`Cache hit: ${symbol}`)
                         return
                     }
                 }
@@ -149,7 +149,7 @@ export const useFinanceStore = create<FinanceStore>()(
                     
                     const isExpired = now - cachedAt >  60 * 60 * 1000 // 1 hour
                     if (!isExpired) {
-                        console.log(`History cache hit (fresh): ${symbol}`)
+                        console.log(`History cache hit: ${symbol}`)
                         return
                     }
                 }
@@ -188,6 +188,12 @@ export const useFinanceStore = create<FinanceStore>()(
                     throw err
                 }
 
+            },
+            removeHistory: (id: string) => {
+                set((state) => {
+                    const { [id]: toRemove, ...newHistory } = state.history
+                    return { history: newHistory }
+                })
             },
             clearError: () => set({ error: null }),
         }),

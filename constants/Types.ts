@@ -28,6 +28,7 @@ export interface FinanceStore {
     removeTicker: (id: string) => void
     refreshAll: () => Promise<void>
     getHistory: (id: string, range: string) => Promise<void>
+    removeHistory: (id: string) => void
     clearError: () => void
 }
 
