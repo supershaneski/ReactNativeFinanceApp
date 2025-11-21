@@ -8,24 +8,20 @@ It functions as the client-side interface for the [Python Finance Server](https:
 ![React Native](https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![Zustand](https://img.shields.io/badge/zustand-%2320232a.svg?style=for-the-badge&logo=react&logoColor=white)
 
+
 ## Screenshots
 
 | Watchlist | Stock Detail & History |
 |:---:|:---:|
 | ![Watchlist](./docs/screen1.webp) | ![Stock Detail](./docs/screen2.webp) |
 
+
 ## Key Features
 
 * **Ticker Tracking:** Monitor stock symbols and current prices.
-* **Interactive Graph:** Visualize historical stock data using **Victory Native**.
-* **Simple Caching:** Implements client-side caching via **Zustand Persist** to minimize network requests and ensure offline availability.
+* **Interactive Graph:** Visualize historical stock data using [Victory Native](https://nearform.com/open-source/victory-native/docs/).
+* **Simple Caching:** Implements client-side caching via [Zustand Persist](https://zustand.docs.pmnd.rs/integrations/persisting-store-data) to minimize network requests and ensure offline availability.
 
-## Tech Stack
-
-* **Framework:** React Native ([Expo SDK](https://github.com/expo/expo/tree/main/templates/expo-template-tabs))
-* **State Management:** [Zustand (with Persist middleware)](https://zustand.docs.pmnd.rs/integrations/persisting-store-data)
-* **Charts:** [Victory Native XL](https://nearform.com/open-source/victory-native/docs/)
-* **Backend:** [Python Finance Server](https://github.com/supershaneski/python-finance-server) (External API)
 
 ## API Integration
 
